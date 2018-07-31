@@ -9,7 +9,7 @@ print('Load data of form...')
 x_train, y_train, x_test, y_test = load_data()
 
 # number of train ex to fit
-train_batch = 1
+train_batch = 50
 print('Fitting ', train_batch, '/', len(x_train))
 
 # train points
@@ -55,17 +55,18 @@ for i in range(len(g_i)):
 # note, actual answer is max{g_1 * x, g_2 * x, ..., g_i * x}
 
 print('Testing on test-set...')
-print('{0:20} {1}'.format('pred','real'))
+print('{0:25} {1}'.format('pred','real'))
 # check if answer makes sense
 for pred in range(train_batch):
     x_i = x_train[pred]
     y_true = y_train[pred]
 
     for g_i in range(len(sol)):
-        sol[g_i] = train[g_i][1] + sum(np.multiply(sol[g_i], (x_i - train[g_i][0])))
+        #print(np.multiply(sol[g_i], (x_i - train[g_i][0])))
+        sol[g_i] = train[g_i][1] + np.multiply(sol[g_i], (x_i - train[g_i][0]))
 
     y_pred = np.amax(sol)
-    print('{0:<20} {1}'.format(y_pred, y_true))
+    print('{0:<25} {1}'.format(y_pred, y_true))
 
 print('\nProb solve time: ', prob.solver_stats.solve_time)
 
