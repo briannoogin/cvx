@@ -78,9 +78,11 @@ prob = cvx.Problem(obj, constraints)
 prob.solve(verbose=True)
 
 sol = []
+y_hats = []
 # print optimal linear values
 for i in range(len(g_i)):
     #print(g_i["g_{0}".format(i)].value,',', end=" ")
+    y_hats.append(float(y_hat["y_hat_{0}".format(i)].value))
     sol.append(float(g_i["g_{0}".format(i)].value))
 print(" ")
 # debug --
@@ -88,9 +90,9 @@ x_0 = test[2][0]
 y_0 = test[2][1]
 maxf = 'max{'
 for g_i in range(len(sol)):
-    print('f{0}(x)='.format(g_i),test[g_i][1], '+', sol[g_i], '*(', 'x','-',test[g_i][0],')')
+    print('f{0}(x)='.format(g_i),y_hats[g_i], '+', sol[g_i], '*(', 'x','-',test[g_i][0],')')
     maxf += ('f{0}(x),'.format(g_i))
-    sol[g_i] = test[g_i][1] + sol[g_i] * (x_0 - test[g_i][0])
+    sol[g_i] = y_hats[i] + sol[g_i] * (x_0 - test[g_i][0])
 
 print(maxf)
 print(y_0, " ", np.amax(sol))
