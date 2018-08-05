@@ -3,15 +3,16 @@ import os
 import pandas as pd
 
 def load_data():
-    f = pd.read_table('mgp.txt', delim_whitespace=True)
+    f = pd.read_table('airfoil_self_noise.dat', delim_whitespace=True)
     print(f.loc[0])
 
     x_train, y_train, x_test, y_test = [], [], [], []
     num_data = len(f)
     for x in range(num_data):
-        y_train.append(f.loc[x][0])
+        y_train.append(f.loc[x][5])
+
         # all pieces of data are used besides str name, and origin (last 2 indices)
-        row_of_data = [f.loc[x][i] for i in range(1,5)]
+        row_of_data = [f.loc[x][i] for i in range(0,5)]
         if row_of_data[2] == '?':
             y_train = y_train[:-1]
             continue
@@ -22,7 +23,7 @@ def load_data():
 
     # now we do 95% train / test split
     size = len(x_train)
-    split = int(size / 20)
+    split = int(size / 15)
     
     x_test = x_train[:split]
     x_train = x_train[split:]

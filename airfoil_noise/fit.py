@@ -9,7 +9,7 @@ print('Load data of form...')
 x_train, y_train, x_test, y_test = load_data()
 
 # number of train ex to fit
-train_batch = len(x_train)
+train_batch = 150
 print('Fitting ', train_batch, '/', len(x_train))
 
 # train points
@@ -22,7 +22,7 @@ g_i = {}
 y_hat = {}
 
 for x in range(len(train)):
-    g_i["g_{0}".format(x)] = cvx.Variable(4)
+    g_i["g_{0}".format(x)] = cvx.Variable(5)
     y_hat["y_hat_{0}".format(x)] = cvx.Variable()
 
 print('Setting up constraints...')
