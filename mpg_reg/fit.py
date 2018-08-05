@@ -9,7 +9,7 @@ print('Load data of form...')
 x_train, y_train, x_test, y_test = load_data()
 
 # number of train ex to fit
-train_batch = 50
+train_batch = len(x_train)
 print('Fitting ', train_batch, '/', len(x_train))
 
 # train points
@@ -39,7 +39,6 @@ print('Setting up objective...')
 for i in range(len(y_hat)):
     obj += ((y_train[i] - y_hat["y_hat_{0}".format(i)]) ** 2)
 
-print(obj)
 obj = cvx.Minimize(obj)
 
 # solve
@@ -47,12 +46,13 @@ print('Solving...')
 prob = cvx.Problem(obj, constraints)
 prob.solve(verbose=True)
 
-sol = []
+g_hats = []
 y_hats = []
+errors = []
 
 # grab optimized y_hats and g_i's
 for i in range(len(g_i)):
-    sol.append(g_i["g_{0}".format(i)].value)
+    g_hats.append(g_i["g_{0}".format(i)].value)
     y_hats.append(y_hat["y_hat_{0}".format(i)].value)
 
 # note, actual answer is max{y_hat_1 + (g_1 * (x - x_train[0])), y_hat_2 + (g_2 * (x - x_train[1])), ...}
@@ -65,12 +65,13 @@ for pred in range(len(x_test)):
     y_true = y_test[pred]
     predictions = []
 
-    for g_i in range(len(sol)):
-        #print(train[g_i][0], sol[g_i])
-        predictions.append(y_hats[g_i] + np.dot(sol[g_i], (x_i - x_train[g_i])))
+    for i in range(len(g_hats)):
+        predictions.append(y_hats[i] + np.dot(g_hats[i], (x_i - x_train[i])))
         
-
     y_pred = np.amax(predictions)
+    errors.append((y_pred - y_true) ** 2)
     print('{0:<25} {1}'.format(y_pred, y_true))
-print('\nProb solve time: ', prob.solver_stats.solve_time)
 
+print('Test batch size: ', len(x_test))
+print('Test mse: ', sum(errors) / len(errors))
+print('\nProb solve time: ', prob.solver_stats.solve_time)

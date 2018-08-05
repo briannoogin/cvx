@@ -30,7 +30,7 @@ x_test = sklearn.preprocessing.scale(x_test)
 y_train = np.reshape(y_train, [len(y_train),1])
 
 # number of variables we consider in each input
-num_vars = 8
+num_vars = 4
 
 # after some searching, these seem to be optimal values
 iter_ = 20000
