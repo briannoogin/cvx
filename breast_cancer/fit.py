@@ -9,7 +9,7 @@ print('Load data of form...')
 x_train, y_train, x_test, y_test = load_data()
 
 # number of train ex to fit
-train_batch = len(x_train)
+train_batch = 15
 print('Fitting ', train_batch, '/', len(x_train))
 
 # train points
