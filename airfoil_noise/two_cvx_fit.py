@@ -88,7 +88,7 @@ def main():
     x_train, y_train, x_test, y_test = load_data()
 
     # number of train ex to fit
-    train_batch = 15
+    train_batch = 100
     print('Fitting ', train_batch, '/', len(x_train))
 
     # train points
@@ -112,10 +112,14 @@ def main():
     print(first_cvx)
 
     # new training data is (-diff of cvx func and real, real)
-    train = [(-(x[1] - x[0]), x[1]) for x in first_cvx]
+    train = [((x[1] - x[0]), x[1]) for x in first_cvx]
+    print('Now fitting a second convex function to this data: ')
     print(train)
 
     x_test = [-(all_preds[i] - y_test[i]) for i in range(len(all_preds))]
+    print('test data: ')
+    print(x_test)
+    print(y_test)
 
     # fit second cvx function
     g_hats, y_hats, solve_time = fit_cvx(train)

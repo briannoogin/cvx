@@ -113,9 +113,13 @@ def main():
 
     # new training data is (-diff of cvx func and real, real)
     train = [(-(x[1] - x[0]), x[1]) for x in first_cvx]
+    print('Now fitting a second convex function to this data: ')
     print(train)
 
     x_test = [-(all_preds[i] - y_test[i]) for i in range(len(all_preds))]
+    print('test data: ')
+    print(x_test)
+    print(y_test)
 
     # fit second cvx function
     g_hats, y_hats, solve_time = fit_cvx(train)
