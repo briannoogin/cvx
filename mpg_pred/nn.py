@@ -22,6 +22,11 @@ print('Data snippit...')
 # load same data as cvx fit
 x_train, y_train, x_test, y_test = load_data()
 
+# so we have the same amount of data:
+train_num = 10
+x_train = x_train[:train_num]
+y_train = y_train[:train_num]
+
 # normalize input data
 x_train = sklearn.preprocessing.scale(x_train)
 x_test = sklearn.preprocessing.scale(x_test)
@@ -33,9 +38,9 @@ y_train = np.reshape(y_train, [len(y_train),1])
 num_vars = 4
 
 # after some searching, these seem to be optimal values
-iter_ = 20000
+iter_ = 10000
 lr = 1e-2
-batch_size = 32
+batch_size = 10
 fc1_size = 32
 
 init = tf.initialize_all_variables()

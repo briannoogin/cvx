@@ -22,7 +22,7 @@ print('Data snippit...')
 # load same data as cvx fit
 x_train, y_train, x_test, y_test = load_data()
 
-# same amount of data
+# so we have the same amount of data:
 train_num = 10
 x_train = x_train[:train_num]
 y_train = y_train[:train_num]
@@ -35,7 +35,7 @@ x_test = sklearn.preprocessing.scale(x_test)
 y_train = np.reshape(y_train, [len(y_train),1])
 
 # number of variables we consider in each input
-num_vars = 8
+num_vars = 7
 
 # after some searching, these seem to be optimal values
 iter_ = 20000

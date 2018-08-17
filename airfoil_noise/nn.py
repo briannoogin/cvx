@@ -26,7 +26,7 @@ print('Data snippit...')
 x_train, y_train, x_test, y_test = load_data()
 
 # so that we have a solid baseline, only use training data that cvx fit uses
-num_train = 150
+num_train = 10
 x_train = x_train[:num_train]
 y_train = y_train[:num_train]
 
@@ -40,7 +40,7 @@ y_train = np.reshape(y_train, [len(y_train),1])
 # after some searching, these seem to be optimal values
 iter_ = 20000
 lr = 1e-2
-batch_size = 32
+batch_size = 10
 fc1_size = 32
 
 init = tf.initialize_all_variables()

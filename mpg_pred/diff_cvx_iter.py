@@ -81,22 +81,33 @@ def test_fit(g_hats, y_hats, solve_time, x_test, y_test, train):
 
     return all_preds, all_true
 
+def pred(x_test, y_test):
+    print('Testing on test-set...')
+    print('{0:25} {1}'.format('pred','real'))
+    errors = []
 
+    for p in range(len(x_test)):
+        print('{0:<25} {1}'.format(x_test[p], y_test[p]))
+        errors.append((x_test[p] - y_test[p]) ** 2)
+
+    print('Testmse: ', sum(errors) / len(errors))
+        
 def main():    
     print('Load data of form...')
     # load_data already loads in as np arrays for us
     x_train, y_train, x_test, y_test = load_data()
 
     # number of train ex to fit
-    train_batch = 15
+    train_batch = 10
     print('Fitting ', train_batch, '/', len(x_train))
 
     # train points
     train = [(x_train[i], y_train[i]) for i in range(train_batch)]
 
+    # fit two cvx functions, one to (x,y) and another to (x, f(x) - y).
     # fit first convex function
     g_hats, y_hats, solve_time = fit_cvx(train)
-    all_preds, y_test = test_fit(g_hats, y_hats, solve_time, x_test, y_test, train)
+    all_preds, _ = test_fit(g_hats, y_hats, solve_time, x_test, y_test, train)
 
     # first_cvx is array of (pred, real) tuples for the train batch
     first_cvx = []
@@ -106,24 +117,53 @@ def main():
             predictions.append(y_hats[j] + np.dot(g_hats[j], (train[i][0] - x_train[j])))
 
         y_pred = np.amax(predictions)
-        first_cvx.append((y_pred, train[i][1]))
+        first_cvx.append(y_pred)
 
+    # first cvx pred on x_test
+    x_test_first_cvx = []
+    for i in range(len(x_test)):
+        predictions = []
+        for j in range(len(g_hats)):
+            predictions.append(y_hats[j] + np.dot(g_hats[j], (x_test[i] - x_train[j])))
+
+        y_pred = np.amax(predictions)
+        x_test_first_cvx.append(y_pred)
+
+    # store fit on the test_batch of f(x)
     print('train batch fit, cvx 1')
     print(first_cvx)
 
     # new training data is (-diff of cvx func and real, real)
-    train = [(-(x[1] - x[0]), x[1]) for x in first_cvx]
+    train = [(train[x][0], (first_cvx[x] - train[x][1])) for x in range(len(first_cvx))]
     print('Now fitting a second convex function to this data: ')
     print(train)
 
-    x_test = [-(all_preds[i] - y_test[i]) for i in range(len(all_preds))]
+    #x_test = [-(all_preds[i] - y_test[i]) for i in range(len(all_preds))]
     print('test data: ')
-    print(x_test)
-    print(y_test)
+    #print(x_test)
+    #print(y_test)
 
     # fit second cvx function
     g_hats, y_hats, solve_time = fit_cvx(train)
-    test_fit(g_hats, y_hats, solve_time, x_test, y_test, train)
+
+    # getting predictions of second cvx function 'g(x)'
+    x_test_second_cvx = []
+    for i in range(len(x_test)):
+        predictions = []
+        for j in range(len(g_hats)):
+            predictions.append(y_hats[j] + np.dot(g_hats[j], (x_test[i] - x_train[j])))
+
+        y_pred = np.amax(predictions)
+        x_test_second_cvx.append(y_pred)
+
+    # real pred = f(x) - g(x)
+    print('==================================')
+    print('f(x) - g(x)')
+    print(len(x_test))
+    print(len(y_test))
+    print(len(x_test_first_cvx), len(x_test_second_cvx))
+    final_pred = [(x_test_first_cvx[i] - x_test_second_cvx[i]) for i in range(len(x_test_first_cvx))]
+    pred(final_pred, y_test)
 
 if __name__ == "__main__":
     main()
