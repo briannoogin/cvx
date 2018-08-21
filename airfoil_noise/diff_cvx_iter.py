@@ -98,7 +98,7 @@ def main():
     x_train, y_train, x_test, y_test = load_data()
 
     # number of train ex to fit
-    train_batch = 10
+    train_batch = 100
     print('Fitting ', train_batch, '/', len(x_train))
 
     # train points
