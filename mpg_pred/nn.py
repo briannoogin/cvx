@@ -38,7 +38,7 @@ y_train = np.reshape(y_train, [len(y_train),1])
 num_vars = 4
 
 # after some searching, these seem to be optimal values
-iter_ = 10000
+iter_ = 30000
 lr = 1e-2
 batch_size = 10
 fc1_size = 32

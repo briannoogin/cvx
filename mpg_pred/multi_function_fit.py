@@ -91,6 +91,8 @@ def pred(x_test, y_test):
         errors.append((x_test[p] - y_test[p]) ** 2)
 
     print('Testmse: ', sum(errors) / len(errors))
+
+    return (sum(errors) / len(errors))
         
 def main():    
     print('Load data of form...')
@@ -98,9 +100,9 @@ def main():
     x_train, y_train, x_test, y_test = load_data()
 
     # number of train ex to fit
-    train_batch = 100
+    train_batch = 75
     print('Fitting ', train_batch, '/', len(x_train))
-    iterations = 25
+    iterations = 17
     # train points
     train = [(x_train[i], y_train[i]) for i in range(train_batch)]
     nth_cvx_train = []
@@ -145,14 +147,15 @@ def main():
    
     print("First cvx fit")
     final_pred = nth_cvx_test[0]
+    t_mse = []
     pred(final_pred, y_test)
     print("================================================")
     for i in range(1, len(nth_cvx_test)):
         final_pred = [(final_pred[j] - nth_cvx_test[i][j]) for j in range(len(nth_cvx_test[i]))]
         print("{0}'th cvx diff function".format(i))
-        pred(final_pred, y_test)
+        t_mse.append(pred(final_pred, y_test))
         print("================================================")
-    
+    print(t_mse) 
     #final_pred = [(x_test_first_cvx[i] - x_test_second_cvx[i]) for i in range(len(x_test_first_cvx))]
 
 if __name__ == "__main__":
