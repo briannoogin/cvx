@@ -21,8 +21,8 @@ def main():
 
     epsilon = .01
     # if we want to arrive within epsilon of the correct answer, generally need 1/(epsilon^2) iter
-    #iter = int(1 / (epsilon ** 2)) 
-    iter = 100
+    iter = int(1 / (epsilon ** 2)) 
+    #iter = 100
 
     for z in range(iter):
         step = 2 / (z + 2)
