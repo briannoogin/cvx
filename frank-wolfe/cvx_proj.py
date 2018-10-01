@@ -5,7 +5,10 @@ import time
 '''
 in_hull -- projection of point onto convex set
 line_search -- convex combination of projection of point onto convex set
-Both should work with arbitrary size inputs.
+binary_search -- calls both above functions to binary search for the projection along a line,
+and return it as a convex combination of the vertices in the convex hull.
+
+all 'should' work with arbitrary size inputs.
 '''
 
 def in_hull(hull, test_point):
@@ -36,15 +39,7 @@ def in_hull(hull, test_point):
         # update step
         curr_proj = curr_proj +  step * (np.subtract(hull[s_k], curr_proj))
     
-    print('proj:',curr_proj)
-    # euclidean distance between projected and test_point
-    distance = np.linalg.norm(curr_proj - test_point)  
-    if distance > epsilon:
-        print(distance, 'euclidean distance away')
-        return False
-
-    print('Within epsilon')
-    return True
+    return curr_proj
  
 def line_search(hull, test_point):
     start = time.time()
@@ -83,22 +78,72 @@ def line_search(hull, test_point):
         cvx_comb[s_k] += scalar_proj
 
     end = time.time()
-    print('Time:', end - start)
+    print('Projection Time:', end - start)
 
     proj_point = sum([cvx_comb[x] * hull[x] for x in range(len(hull))]) 
     # return a convex combination representing the projection, also return the projection itself
     return cvx_comb, proj_point
 
+def binary_search(hull, point):
+    # search for the x_n \in [x_1, x_2, ... x_n-1] that is equal to it's projection. 
+    # searching alone the entire line using binary search.
+    epsilon = 0.01
+
+    start = time.time()
+    # find a suitable y value to start our binary search. This value is the max y value of the hull
+    all_ys = [hull[x][len(hull[x]) - 1] for x in range(len(hull))]
+    max_y = max(all_ys)
+    min_y = min(all_ys)
+    
+    # our projected point must be min_y < y < max_y
+    # keep track of previously visited points for binary search
+    visited_points = [max_y]
+    test_point = np.append(point, max_y)
+   
+    # see if our inital guess is actually it's own projection onto the hull
+    proj_found = in_hull(hull, test_point)
+
+    # distance from the binary searched y to the projected y
+    distance = test_point[len(test_point) - 1] - proj_found[len(proj_found) - 1]
+    prev_max_y = max_y
+    
+    # binary search
+    while distance > epsilon and distance < -1 * epsilon:
+        if distance < 0:
+            min_y = max_y
+            max_y = prev_max_y
+            continue
+       
+        prev_max_y = max_y
+        max_y = (max_y + min_y) / 2
+        test_point[len(test_point) - 1] = max_y
+        proj_found = in_hull(hull, test_point)
+        distance = test_point[len(test_point) - 1] - proj_found[len(proj_found) - 1]
+    
+    # now, find the point as a convex combination of the vertices
+    proj = line_search(hull, test_point)
+
+    end = time.time()
+    print('Binary search + line_search time: ', end - start)
+
+    return proj
+
 def main():
-    # our cvx hull
+    # our cvx hull (example, needs to be in np.array)
     hull = np.array([[2,1], [4,3], [1,1.5], [.5,5]])
     
     # point we wish to project onto the set
-    p_point = np.array([0,3])
+    p_point = np.array([2,5])
     
     #_ = in_hull(hull, p_point)
     cvx_comb, proj = line_search(hull, p_point)
-    print(proj)
-    
+    print("True proj: ", proj)
+   
+    # now use binary search to look for the projection of the point along the line x=2
+    # this should return the same thing as proj((2,5)) onto the convex set.
+    proj_point = binary_search(hull, np.array(2))
+    print("Binary searched projection: ", proj_point[1])
+    print("Point as a convex combination of hull vertices: ", proj_point[0])
+
 if __name__ == "__main__":
     main()
