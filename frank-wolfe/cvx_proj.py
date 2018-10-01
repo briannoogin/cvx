@@ -8,7 +8,11 @@ line_search -- convex combination of projection of point onto convex set
 binary_search -- calls both above functions to binary search for the projection along a line,
 and return it as a convex combination of the vertices in the convex hull.
 
-all 'should' work with arbitrary size inputs.
+Notes:
+1. all 'should' work with arbitrary size inputs.
+2. Maybe use cython to speed it up? would have to reimplement some stuff though because np arrays
+are inefficient to call in cython.
+3. tested using 2d convex set, how can we fix it for projecting only onto a lower convex hull? (i.e. the actual function we're using for prediction) 
 '''
 
 def in_hull(hull, test_point):
