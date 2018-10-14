@@ -141,7 +141,7 @@ def binary_search(hull, point):
 
 def main():
     # our cvx hull (example, needs to be in np.array)
-    hull = np.array([[2,1], [4,3], [1,1.5], [.5,5]])
+    hull = np.array([[2,1], [4,3], [1,1.5], [.5,5], [5,7]])
     
     # point we wish to project onto the set
     p_point = np.array([3,6])  
@@ -151,7 +151,7 @@ def main():
     # this should return the same thing as proj((2,5)) onto the convex set.
     
     # line to search along 
-    x = 1.4 
+    x = 4.4 
     proj_point = binary_search(hull, np.array(x))
     
     print("\nBinary searched projection along line x={0}: ".format(x), proj_point[1])
