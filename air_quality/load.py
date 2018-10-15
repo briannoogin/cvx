@@ -3,13 +3,11 @@ import os
 import pandas as pd
 
 def load_data(path):
-    f = pd.read_table(path, delim_whitespace=True)
-    print(f.loc[0])
-
+    f = pd.read_table(path, header=None, delim_whitespace=True)
     train, test = [], []
     
     num_data = len(f)
-    for x in range(num_data):
+    for x in range(0, num_data):
         test.append(f.loc[x][0])
 
         # all pieces of data are used besides str name, and origin (last 2 indices)
