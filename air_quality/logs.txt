@@ -1,0 +1,83 @@
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [2.94970519]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  92.6731060442899
+Normalized Data: True
+Architecture: [128, 64, 32, 32]
+lr_: 0.01
+iterations: 20000
+
+========================================
+// Relu activations:
+
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [657.39641289]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  695.6986882062165
+Normalized Data: False
+Architecture: [128, 64, 32, 32]
+lr_: 0.01
+iterations: 100000
+
+
+
+
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [619.84618159]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  1760.1463229393885
+
+Normalized Data: True
+Architecture: [128, 64, 32, 32]
+lr_: 0.01
+iterations: 100000
+
+
+
+
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [795.26131654]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  834.911454276888
+
+Normalized Data: False
+Architecture: [256, 128, 128, 64, 32, 32]
+lr_: 0.01
+iterations: 200000
+
+
+
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [795.74227585]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  836.1186748863284
+
+Normalized Data: False
+Architecture: [256, 128, 128, 64, 32, 32]
+lr_: 0.1
+iterations: 50000
