@@ -18,16 +18,16 @@ print('np seed: ', np_rand)
 print('tf seed: ', tf_rand)
 
 # for abstracting model creation
-icnn_arch = [128, 64, 64, 32, 32]
+icnn_arch = [256, 128, 128, 64, 32, 32]
 print_weights = False
 clipped_weights = {}
+normalize_data = False
 
 # number of variables we consider in each input
 num_vars = 14
 
-# after some searching, these seem to be optimal values
-iter_ = 20000
-lr = 1e-2
+iter_ = 50000
+lr = 1e-1
 batch_size = 32
 
 init = tf.initialize_all_variables()
@@ -42,7 +42,7 @@ def clipped_fc(x, input_size, output_size, layer_num, softmax=True):
     clipped_weights[var_name] = W
 
     if softmax:
-        return tf.nn.softmax(tf.matmul(x, W) + b)
+        return tf.nn.relu(tf.matmul(x, W) + b)
     else:
         return tf.matmul(x, W) + b
 
@@ -100,8 +100,9 @@ with tf.Session() as sess:
     y_train = np.reshape(y_train, [len(y_train),1])
 
     # normalize input data
-    # x_train = sklearn.preprocessing.scale(x_train)
-    # x_test = sklearn.preprocessing.scale(x_test)
+    if normalize_data:
+        x_train = sklearn.preprocessing.scale(x_train)
+        x_test = sklearn.preprocessing.scale(x_test)
 
     for i in range(iter_):
         # sklearn shuffle to get minibatch
@@ -153,6 +154,10 @@ with tf.Session() as sess:
     print('\nTotal test size: ', len(y_train))
     print('Test mse: ', sum(error) / len(error))
 
+    print('\nNormalized Data:', normalize_data)
+    print('Architecture:',icnn_arch)
+    print('lr_:',lr)
+    print('iterations:',iter_)
 
 '''
 ## legacy icnn construction method
