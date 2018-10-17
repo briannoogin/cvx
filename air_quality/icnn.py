@@ -18,7 +18,8 @@ print('np seed: ', np_rand)
 print('tf seed: ', tf_rand)
 
 # for abstracting model creation
-icnn_arch = [128, 128, 64, 64, 32, 32]
+icnn_arch = [128, 64, 64, 32, 32]
+print_weights = False
 clipped_weights = {}
 
 # number of variables we consider in each input
@@ -68,6 +69,7 @@ def fcnn(input_data, arch):
 
     return nn
 
+
 # input placeholder
 X = tf.placeholder(tf.float32, [None, num_vars])
 
@@ -88,8 +90,8 @@ with tf.Session() as sess:
     
     print('Data snippit...')
     # load same data as cvx fit
-    x_train, y_train = load_data('air_quality_train')
-    x_test, y_test = load_data('air_quality_test')
+    x_train, y_train = load_data('air_quality_train', omit=True)
+    x_test, y_test = load_data('air_quality_test', omit=True)
     
     print(x_train[0])
     print(y_train[0])
@@ -112,16 +114,16 @@ with tf.Session() as sess:
         for op in clip_ops:
             sess.run(op)
 
-        # printing progress
+        # print training progress
         if i % 100 == 0:
             print('Iter: {0} Train mse: {1}'.format(i, current_cost))
-            '''
-            # print out weights to make sure > 0
-            tvars = tf.trainable_variables()
-            tvars_vals = sess.run(tvars)
-            for var, val in zip(tvars, tvars_vals):
-                print(var.name, val)
-            '''
+            
+            # print out weights to make sure > 0 
+            if print_weights:
+                tvars = tf.trainable_variables()
+                tvars_vals = sess.run(tvars)
+                for var, val in zip(tvars, tvars_vals):
+                    print(var.name, val)
 
 # ======================================================================= #
     # print MSE on entire training set
