@@ -18,7 +18,8 @@ print('np seed: ', np_rand)
 print('tf seed: ', tf_rand)
 
 # for abstracting model creation
-icnn_arch = [256, 128, 128, 64, 32, 32]
+#icnn_arch = [256, 128, 128, 64, 32, 32]
+icnn_arch = [2000, 2000]
 print_weights = False
 clipped_weights = {}
 normalize_data = False
