@@ -81,3 +81,19 @@ Normalized Data: False
 Architecture: [256, 128, 128, 64, 32, 32]
 lr_: 0.1
 iterations: 50000
+
+
+Testing on train-set...
+
+Total train size:  300
+Train mse:  [708.91220417]
+
+Testing on validation-set...
+
+Total test size:  300
+Test mse:  810.4053849017506
+
+Normalized Data: False
+Architecture: [2000, 2000]
+lr_: 0.1
+iterations: 90000

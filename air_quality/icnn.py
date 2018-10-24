@@ -27,7 +27,7 @@ normalize_data = False
 # number of variables we consider in each input
 num_vars = 14
 
-iter_ = 50000
+iter_ = 90000
 lr = 1e-1
 batch_size = 32
 
